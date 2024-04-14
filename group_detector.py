@@ -1,7 +1,7 @@
 import cv2
 from ultralytics import YOLO
 
-cap = cv2.VideoCapture("walking.mp4")
+cap = cv2.VideoCapture("path/to/video")
 
 ret, frame = cap.read()
 object_count = 0
