@@ -4,15 +4,16 @@ import torch
 import cv2
 
 class DeepTracker:
-    def __init__(self, path, device):
+    def __init__(self, path, device, yolo):
         self.path = path
+        self.yolo = yolo
         self.device = device
         self.model = self.load_model()
         self.names = self.model.names
         self.tracker = DeepSort(max_iou_distance=0.4, max_age=50)
 
     def load_model(self):
-        model = YOLO("yolo11n.pt")
+        model = YOLO(self.yolo)
         model.to(self.device)
         model.fuse()
         return model
@@ -70,5 +71,7 @@ class DeepTracker:
 
 path = 1
 device = "mps" if torch.backends.mps.is_available() else "cpu"
-tracker = DeepTracker(path, device)
+# you may use any YOLO model here
+yolo = "yolov9t.pt"
+tracker = DeepTracker(path, device, yolo)
 tracker()

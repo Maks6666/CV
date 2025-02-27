@@ -7,15 +7,16 @@ import cv2
 import torch
 
 class SortTracker:
-    def __init__(self, path, device):
+    def __init__(self, path, device, yolo):
         self.path = path
         self.device = device
+        self.yolo = yolo
         self.model = self.load_model()
         self.names = self.model.names
         self.sort = Sort(max_age=50, min_hits=8, iou_threshold=0.4)
 
     def load_model(self):
-        model = YOLO()
+        model = YOLO(self.yolo)
         model.to(self.device)
         model.fuse()
         return model
@@ -78,7 +79,9 @@ class SortTracker:
 
 path = 1
 device = "mps" if torch.backends.mps.is_available() else "cpu"
-tracker = SortTracker(path, device)
+# you may use any YOLO model here
+yolo = "yolo11.pt"
+tracker = SortTracker(path, device, yolo)
 tracker()
 
 
